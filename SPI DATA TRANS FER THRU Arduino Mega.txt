@@ -1,0 +1,89 @@
+
+
+#define F_CPU 1000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+
+
+#define MOSI 3
+
+#define SCK 5
+
+#define SS 2
+
+int main (void)
+
+{
+	DDRF=0XFF;
+	DDRB = (1<<MOSI)|(1<<SCK)|(1<<SS); //MOSI and SCK are output
+
+	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0); //enable SPI as master
+	
+	
+	DDRH=0X00;
+	
+
+	/* Replace with your application code */
+	
+	unsigned char A,B,C,D,E,F,G,H;
+	
+	
+
+	while(1) //do for ever
+
+
+	{
+		PORTB &= ~(1<<SS); //enable slave devicE
+     if(PINH & 0X01)
+	 {
+		 A=0X01;
+		 SPDR=A;
+	 }
+	   if(PINH & 0X02)
+	   {
+		   B=0X02;
+		   SPDR=B;
+	   }
+	     if(PINH & 0X04)
+	     {
+		     C=0X04;
+			 SPDR=C;
+	     }
+		   if(PINH & 0X08)
+		   {
+			   D=0X08;
+			   SPDR=D;
+		   }
+		     if(PINH & 0X10)
+		     {
+			     E=0X10;
+				 SPDR=E;
+		     }
+			   if(PINH & 0X20)
+			   {
+				   F=0X20;
+				   SPDR=F;
+			   }
+			     if(PINH & 0X40)
+			     {
+				     G=0X40;
+					 SPDR=G;
+			     }
+				   if(PINH & 0X80)
+				   {
+					   H=0X80;
+					   SPDR=H;
+				   }
+				   
+				 // char array[8]={A,B,C,D,E,F,G,H};
+					 // for(int i=0;i<=8;i++)
+					  
+						  
+						  
+		while(!(SPSR & (1<<SPIF)))
+		PORTF^= (1<<PORTF);
+
+		PORTB |= (1<<SS); //disable slave device
+		return 0;
+	}
+}

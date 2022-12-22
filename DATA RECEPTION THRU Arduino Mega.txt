@@ -1,0 +1,86 @@
+
+#define F_CPU 1000000UL
+#include <avr/io.h>
+#include "lcd/lcd.h"
+#include <util/delay.h >
+
+#define MISO 4
+
+
+int main (void)
+
+{
+	
+
+
+	DDRD = 0xFF; //Port D is output
+
+	DDRB = (1<<MISO); //MISO is output
+
+	SPCR = (1<<SPE); //enable SPI as slave
+	
+	
+	lcd_init(LCD_DISP_ON_CURSOR); /*initialize lcd,display on, cursor on */
+
+	lcd_clrscr();             /* clear screen of lcd */
+	lcd_home();    
+	lcd_puts("you pressed the key");           /* bring cursor to 0,0 */
+	lcd_gotoxy(0,1);
+	
+	while(1)
+
+	{
+		unsigned char data;
+		data=SPDR;
+
+		while(!(SPSR &(1<<SPIF))); //wait for transfer finish
+		
+		
+		if (data==0X01 )
+		{
+			lcd_puts("1");
+			_delay_ms(10);
+		}
+		if (data=='B')
+		{
+			lcd_puts("2");
+			_delay_ms(10);
+		}
+		if (data=='C')
+		{
+			lcd_puts("3");
+			_delay_ms(10);
+		}
+		if (data=='D' )
+		{
+			lcd_puts("4");
+			_delay_ms(10);
+		}
+		if (data=='E' )
+		{
+			lcd_puts("5");
+			_delay_ms(10);
+		}
+		if (data=='F')
+		{
+			lcd_puts("6");
+			_delay_ms(10);
+		}
+		if (data=='G')
+		{
+			lcd_puts("7");
+			_delay_ms(10);
+		}
+		if (data=='H')
+		{
+			lcd_puts("8");
+			_delay_ms(10);
+		}
+		
+		
+	}
+	
+	
+	return 0;
+}
+
